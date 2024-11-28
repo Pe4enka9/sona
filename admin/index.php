@@ -18,6 +18,7 @@ if (!isset($_SESSION['user'])) {
 <body>
 <a href="/admin/auth/logout.php">Выйти</a>
 <a href="/admin/services/">Услуги</a>
+<a href="/admin/reviews/">Отзывы</a>
 <a href="/admin/rooms/">Номера</a>
 </body>
 </html>

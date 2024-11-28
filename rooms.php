@@ -2,13 +2,43 @@
 /**@var PDO $pdo */
 $pdo = require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
-$rooms = $pdo->query("SELECT
+$min_price = empty($_GET['min_price']) ? 'all' : $_GET['min_price'];
+$max_price = empty($_GET['max_price']) ? 'all' : $_GET['max_price'];
+$max_people = empty($_GET['max_people']) ? 'all' : $_GET['max_people'];
+$room_services = empty($_GET['services']) ? [] : $_GET['services'];
+
+$sql = "SELECT
 rooms.*,
 GROUP_CONCAT(services.name SEPARATOR ', ') AS services_name
 FROM room_service
 JOIN rooms ON room_service.room_id = rooms.id
-JOIN services ON room_service.service_id = services.id
-GROUP BY rooms.id")->fetchAll(PDO::FETCH_ASSOC);
+JOIN services ON room_service.service_id = services.id";
+
+$where = [];
+
+if ($min_price != 'all') {
+    $where[] = "rooms.price >= $min_price";
+}
+if ($max_price != 'all') {
+    $where[] = "rooms.price <= $max_price";
+}
+if ($max_people != 'all') {
+    $where[] = "rooms.max_people >= $max_people";
+}
+if ($room_services) {
+    $room_services_implode = implode(',', $room_services);
+    $where[] = "room_service.service_id IN ($room_services_implode)";
+}
+
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
+$sql .= " GROUP BY rooms.id";
+
+$rooms = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+$services = $pdo->query("SELECT * FROM services")->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -197,34 +227,48 @@ GROUP BY rooms.id")->fetchAll(PDO::FETCH_ASSOC);
 <!-- Rooms Section Begin -->
 <section class="rooms-section spad">
     <div class="container">
+        <form>
+            <input type="number" name="min_price" placeholder="Минимальная цена" value="<?= $min_price ?>">
+            <input type="number" name="max_price" placeholder="Максимальная цена" value="<?= $max_price ?>">
+            <input type="number" name="max_people" placeholder="Кол-во людей" value="<?= $max_people ?>">
+
+            <?php foreach ($services as $service): ?>
+                <input type="checkbox" name="services[]" id="<?= $service['id'] ?>"
+                       value="<?= $service['id'] ?>" <?= in_array($service['id'], $room_services) ? 'checked' : '' ?>>
+                <label for="<?= $service['id'] ?>"><?= $service['name'] ?></label>
+            <?php endforeach; ?>
+
+            <input type="submit" value="Искать">
+            <a href="/rooms.php">Сбросить</a>
+        </form>
         <div class="row">
             <?php foreach ($rooms as $room): ?>
-            <div class="col-lg-4 col-md-6">
-                <div class="room-item">
-                    <img src="img/room/room-1.jpg" alt="">
-                    <div class="ri-text">
-                        <h4><?= $room['name'] ?></h4>
-                        <h3><?= $room['price'] ?>$<span>/Pernight</span></h3>
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td class="r-o">Size:</td>
-                                <td><?= $room['size'] ?> ft</td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Capacity:</td>
-                                <td>Max persion <?= $room['max_people'] ?></td>
-                            </tr>
-                            <tr>
-                                <td class="r-o">Services:</td>
-                                <td><?= $room['services_name'] ?></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <a href="/room-details.php?slug=<?= $room['slug'] ?>" class="primary-btn">More Details</a>
+                <div class="col-lg-4 col-md-6">
+                    <div class="room-item">
+                        <img src="img/room/room-1.jpg" alt="">
+                        <div class="ri-text">
+                            <h4><?= $room['name'] ?></h4>
+                            <h3><?= $room['price'] ?>$<span>/Pernight</span></h3>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td class="r-o">Size:</td>
+                                    <td><?= $room['size'] ?> ft</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Capacity:</td>
+                                    <td>Max persion <?= $room['max_people'] ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Services:</td>
+                                    <td><?= $room['services_name'] ?></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <a href="/room-details.php?slug=<?= $room['slug'] ?>" class="primary-btn">More Details</a>
+                        </div>
                     </div>
                 </div>
-            </div>
             <?php endforeach; ?>
             <div class="col-lg-12">
                 <div class="room-pagination">

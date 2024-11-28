@@ -2,6 +2,6 @@
 
 session_start();
 
-unset($_SESSION['admin']);
+unset($_SESSION['user']);
 
-header('Location: /login.php');
+header('Location: /admin/login.php');

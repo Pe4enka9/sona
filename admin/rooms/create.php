@@ -29,7 +29,7 @@ $services = $pdo->query("SELECT * FROM services")->fetchAll(PDO::FETCH_ASSOC);
     <input type="number" name="price" placeholder="Цена">
     <input type="number" name="size" placeholder="Размеры">
     <input type="number" name="max_people" placeholder="Макс. человек">
-    <select name="services[]">
+    <select name="services[]" multiple>
         <?php foreach ($services as $service): ?>
             <option value="<?= $service['id'] ?>"><?= $service['name'] ?></option>
         <?php endforeach; ?>

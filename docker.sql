@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: MySQL-8.2
--- Время создания: Ноя 28 2024 г., 22:36
+-- Время создания: Ноя 30 2024 г., 15:49
 -- Версия сервера: 8.2.0
 -- Версия PHP: 8.3.6
 
@@ -64,7 +64,9 @@ CREATE TABLE `reviews` (
 INSERT INTO `reviews` (`id`, `name`, `email`, `rating`, `review`, `room_id`, `is_moderated`, `created_at`) VALUES
 (5, 'Ivan', 'ivan.tixonov00@mail.ru', 5, 'The best room!', 6, 1, '2024-11-28 14:09:30'),
 (6, 'das', 'ivan.tixonov00@mail.ru', 1, 'fdsfg', 6, 1, '2024-11-28 14:26:43'),
-(7, 'Вика', 'vika@mail.ru', 5, 'Ну реально классный!', 9, 1, '2024-11-28 15:26:26');
+(7, 'Вика', 'vika@mail.ru', 5, 'Ну реально классный!', 9, 1, '2024-11-28 15:26:26'),
+(8, 'trdt', 'drtd@mail.ru', 3, 'ertyresy', 2, 1, '2024-11-29 13:27:05'),
+(9, 'Igor', 'dsa@dsa', 5, 'ВСЁ КЛАССНО!!!!!!!', 10, 1, '2024-11-29 13:32:32');
 
 -- --------------------------------------------------------
 
@@ -91,7 +93,8 @@ INSERT INTO `rooms` (`id`, `name`, `slug`, `price`, `size`, `max_people`, `descr
 (5, 'rttrfyr', 'ytr', 258, 2, 1, '<p>dasdsa</p>\r\n'),
 (6, 'New', 'New', 159, 60, 3, '<h1>Описание</h1>\r\n'),
 (8, 'привет как дела', 'privet-kak-dela', 200, 100, 5, '<p>Привет</p>\r\n'),
-(9, 'Новый номер', 'novyy-nomer', 500, 125, 5, '<h1>Это классный номер!</h1>\r\n\r\n<p><strong><em>Ну очень классный</em></strong></p>\r\n');
+(9, 'Новый номер', 'novyy-nomer', 500, 125, 5, '<h1>Это классный номер!</h1>\r\n\r\n<p><strong><em>Ну очень классный</em></strong></p>\r\n'),
+(10, 'dutrjy', 'dutrjy', 600, 12, 1, '<h3><strong><em><s>R7YI-H9FRU9WE</s></em></strong></h3>\r\n');
 
 -- --------------------------------------------------------
 
@@ -111,12 +114,13 @@ CREATE TABLE `room_service` (
 
 INSERT INTO `room_service` (`id`, `room_id`, `service_id`) VALUES
 (26, 8, 1),
-(27, 8, 3),
-(28, 6, 3),
-(29, 5, 3),
 (30, 2, 1),
 (33, 9, 4),
-(34, 9, 5);
+(34, 9, 5),
+(39, 10, 1),
+(40, 10, 4),
+(41, 10, 5),
+(42, 10, 6);
 
 -- --------------------------------------------------------
 
@@ -135,9 +139,9 @@ CREATE TABLE `services` (
 
 INSERT INTO `services` (`id`, `name`) VALUES
 (1, 'mmh'),
-(3, 'fdsfd'),
 (4, 'Душ'),
-(5, 'Туалет');
+(5, 'Туалетf'),
+(6, 'Кухня');
 
 --
 -- Индексы сохранённых таблиц
@@ -192,25 +196,25 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT для таблицы `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT для таблицы `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `room_service`
 --
 ALTER TABLE `room_service`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT для таблицы `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

@@ -4,18 +4,13 @@ $pdo = require $_SERVER['DOCUMENT_ROOT'] . "/db.php";  // Подключение
 
 session_start(); // Начало сессии
 
-$login = $_POST["login"]; // Получение айди услуги методом post, где name инпута = login
+$login = $_POST["login"]; // Получение логина методом post, где name инпута = login
 // (записали полученные данные в переменную $login)
 
-$password = $_POST["password"]; // Получение айди услуги методом post, где name инпута = password
+$password = $_POST["password"]; // Получение пароля методом post, где name инпута = password
 // (записали полученные данные в переменную $password)
 
-$adminQuery = $pdo
-    ->prepare("SELECT * FROM admin WHERE login = :login");
-
-$adminQuery->execute(['login' => $login]);
-
-$admin = $adminQuery->fetch(PDO::FETCH_ASSOC);
+$admin = $pdo->query("SELECT * FROM admin WHERE login = $login")->fetch(PDO::FETCH_ASSOC);
 
 if (!$admin || $admin['password'] !== $password) {
     header('Location: /admin/login.php');
